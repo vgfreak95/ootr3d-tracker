@@ -8,7 +8,10 @@ use std::thread;
 use std::{fs::{self, File}, sync::Arc, io::Read};
 use std::i64;
 use citra_memory as citra;
-use fltk::{app, prelude::*, window::Window};
+
+use fltk::{app, prelude::*, window::Window, image::PngImage, frame::Frame, table::Table, group, button::Button};
+// use fltk_flex::Flex;
+use fltk_grid::Grid;
 
 fn main() {
 
@@ -46,9 +49,38 @@ fn main() {
 
     let app = app::App::default();
     let mut wind = Window::new(100, 100, 400, 400, "Hello from rust!");
+    let mut grid = Grid::default_fill();
+
+    grid.debug(true);
+    grid.set_layout(3, 3);
+
+    let mut sw1_frame = Frame::default().with_size(50, 50);
+    let mut sw2_frame = Frame::default().with_size(50, 50);
+    let mut sw3_frame = Frame::default().with_size(50, 50);
+
+    let mut kokiri = PngImage::load("res/swords/kokiri_sword_dark.png").unwrap();
+    let mut master = PngImage::load("res/swords/master_sword_dark.png").unwrap();
+    let mut biggor = PngImage::load("res/swords/biggorons_sword_dark.png").unwrap();
+
+    kokiri.scale(70, 70, true, true);
+    master.scale(70, 70, true, true);
+    biggor.scale(70, 70, true, true);
+    // maste
+    sw1_frame.set_image(Some(kokiri));
+    sw2_frame.set_image(Some(master));
+    sw3_frame.set_image(Some(biggor));
+
+    grid.insert(&mut sw1_frame, 0, 0);
+    grid.insert(&mut sw2_frame, 0, 1);
+    grid.insert(&mut sw3_frame, 0, 2);
+
+
+    
+    
     wind.end();
     wind.show();
     app.run().unwrap();
+
     // println!("{}", game_address);
     // println!("{}", converted);
     // let handle = thread::spawn(move || {
