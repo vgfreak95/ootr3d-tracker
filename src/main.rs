@@ -8,13 +8,14 @@ use std::thread;
 use std::{fs::{self, File}, sync::Arc, io::Read};
 use std::i64;
 use citra_memory as citra;
+use fltk::{app, prelude::*, window::Window};
 
 fn main() {
 
     let mut proc = ps::Processes::new()
         .unwrap_or_else(|err| panic!("Couldn't get list of processes {}", err))
         .find(|p| p.sz_exe_file == "citra-qt.exe")
-        .unwrap()
+        .expect("There was an error opening the citra process")
         .open(false, PROCESS_ALL_ACCESS)
         .unwrap_or_else(|err| panic!("Couldn't open process {}", err));
 
@@ -25,7 +26,7 @@ fn main() {
         .expect("Couldn't convert to decimal");
     
     println!("Address: {}", i_game_address);
-    assert_eq!(i_game_address, 1760616525904);
+    // assert_eq!(i_game_address, 1760616525904);
 
     println!("Bit Shift: {}", citra::bit_shift(0x0587A0E));
 
@@ -41,9 +42,13 @@ fn main() {
     let value = proc.read::<i8>(swords as usize).unwrap();
         // .unwrap_or_else(|err| panic!("There was an error {}", err));
     
-    println!("{}", value);
+    println!("{:04b}", value);
 
-    
+    let app = app::App::default();
+    let mut wind = Window::new(100, 100, 400, 400, "Hello from rust!");
+    wind.end();
+    wind.show();
+    app.run().unwrap();
     // println!("{}", game_address);
     // println!("{}", converted);
     // let handle = thread::spawn(move || {

@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 subprocess = "0.2.8"
 faithe = "0.7.0"
+fltk = "^1.3"
