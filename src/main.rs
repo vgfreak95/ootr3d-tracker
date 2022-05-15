@@ -16,27 +16,20 @@ use fltk::{app, prelude::*, window::Window, image::PngImage, frame::Frame, table
 use fltk_grid::Grid;
 use glob::glob;
     
-// fn get_pngs<'a>(files: &'a mut Vec<&str>) -> Result<(), glob::GlobError> {
-
-//     // let mut inner_files: Vec<&str> = Vec::new();
-//     let mut new_str: String;
-
-//     for entry in glob("res/**/*.png").unwrap() {
-//         let file = entry.ok().unwrap();
-//         // let new_file = file.to_str().unwrap().clone();
-//         files.push();
-//     }
-//     Ok(())
-// }
+// fn
 
 fn main() {
 
 
-    let pngs: Vec<_> = glob("res/**/*.png").unwrap()
+    let mut pngs: Vec<_> = glob("res/**/*dark.png").unwrap()
         .into_iter()
         .filter_map(|f| f.ok() )
         .map(|f| f)
         .collect();
+
+    // pngs.remove(6);
+    pngs.sort();
+    println!("{}", &pngs.len());
 
     
 
@@ -85,36 +78,45 @@ fn main() {
     let mut wind = Window::new(100, 100, w_width, w_height, "Hello from rust!");
     let mut grid = Grid::default_fill();
 
-    grid.debug(true);
+    grid.debug(false);
     grid.set_layout(rows, cols);
 
-    // for col in 0..2 {
-    //     for row in 0..2 {
+    let mut i = 0;
+    for row in 0..rows {
+        for col in 0..cols {
 
-    //     }
-    // }
+            let mut frame = Frame::default();
+            let mut image = PngImage::load(&pngs[i]).expect("fltk error");
+            image.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
+            frame.set_image(Some(image));
+            grid.insert(&mut frame, row, col);
+            println!("{}", i);
+            i = i+1;
+
+        }
+    }
 
 
 
-    let mut sw1_frame = Frame::default().with_size(50, 50);
-    let mut sw2_frame = Frame::default().with_size(50, 50);
-    let mut sw3_frame = Frame::default().with_size(50, 50);
+    // let mut sw1_frame = Frame::default();
+    // let mut sw2_frame = Frame::default().with_size(50, 50);
+    // let mut sw3_frame = Frame::default().with_size(50, 50);
 
-    let mut kokiri = PngImage::load("res/swords/kokiri_sword_dark.png").unwrap();
-    let mut master = PngImage::load("res/swords/master_sword_dark.png").unwrap();
-    let mut biggor = PngImage::load("res/swords/biggorons_sword_dark.png").unwrap();
+    // let mut kokiri = PngImage::load("res//swords//kokiri_sword_dark.png").unwrap();
+    // let mut master = PngImage::load("res/swords/master_sword_dark.png").unwrap();
+    // let mut biggor = PngImage::load("res/swords/biggorons_sword_dark.png").unwrap();
 
-    kokiri.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
-    master.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
-    biggor.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
+    // kokiri.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
+    // master.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
+    // biggor.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
     // maste
-    sw1_frame.set_image(Some(kokiri));
-    sw2_frame.set_image(Some(master));
-    sw3_frame.set_image(Some(biggor));
+    // sw1_frame.set_image(Some(kokiri));
+    // sw2_frame.set_image(Some(master));
+    // sw3_frame.set_image(Some(biggor));
 
-    grid.insert(&mut sw1_frame, 0, 0);
-    grid.insert(&mut sw2_frame, 0, 1);
-    grid.insert(&mut sw3_frame, 0, 2);
+    // grid.insert(&mut sw1_frame, 0, 0);
+    // grid.insert(&mut sw2_frame, 0, 1);
+    // grid.insert(&mut sw3_frame, 0, 2);
 
 
     
