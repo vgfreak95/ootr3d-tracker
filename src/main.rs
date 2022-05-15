@@ -1,19 +1,46 @@
 mod citra_memory;
 
 use std::process::{Command, Stdio};
-use std::io::Write;
+use std::io::{Write, Read};
+use std::io;
+use std::path::{Path, PathBuf};
 use faithe::process as ps;
 use faithe::types::access_rights::PROCESS_ALL_ACCESS;
 use std::thread;
-use std::{fs::{self, File}, sync::Arc, io::Read};
+use std::{fs::{self, File, DirEntry}, sync::Arc};
 use std::i64;
 use citra_memory as citra;
 
 use fltk::{app, prelude::*, window::Window, image::PngImage, frame::Frame, table::Table, group, button::Button};
 // use fltk_flex::Flex;
 use fltk_grid::Grid;
+use glob::glob;
+    
+// fn get_pngs<'a>(files: &'a mut Vec<&str>) -> Result<(), glob::GlobError> {
+
+//     // let mut inner_files: Vec<&str> = Vec::new();
+//     let mut new_str: String;
+
+//     for entry in glob("res/**/*.png").unwrap() {
+//         let file = entry.ok().unwrap();
+//         // let new_file = file.to_str().unwrap().clone();
+//         files.push();
+//     }
+//     Ok(())
+// }
 
 fn main() {
+
+
+    let pngs: Vec<_> = glob("res/**/*.png").unwrap()
+        .into_iter()
+        .filter_map(|f| f.ok() )
+        .map(|f| f)
+        .collect();
+
+    
+
+    println!("{:?}", &pngs);
 
     let mut proc = ps::Processes::new()
         .unwrap_or_else(|err| panic!("Couldn't get list of processes {}", err))
@@ -53,6 +80,14 @@ fn main() {
 
     grid.debug(true);
     grid.set_layout(3, 3);
+
+    // for col in 0..2 {
+    //     for row in 0..2 {
+
+    //     }
+    // }
+
+
 
     let mut sw1_frame = Frame::default().with_size(50, 50);
     let mut sw2_frame = Frame::default().with_size(50, 50);
