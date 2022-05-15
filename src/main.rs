@@ -73,13 +73,20 @@ fn main() {
         // .unwrap_or_else(|err| panic!("There was an error {}", err));
     
     println!("{:04b}", value);
+    
+    let cell_size = 80;
+    let rows = 4;
+    let cols = 3;
+
+    let w_height = cell_size * rows;
+    let w_width = cell_size * cols;
 
     let app = app::App::default();
-    let mut wind = Window::new(100, 100, 400, 400, "Hello from rust!");
+    let mut wind = Window::new(100, 100, w_width, w_height, "Hello from rust!");
     let mut grid = Grid::default_fill();
 
     grid.debug(true);
-    grid.set_layout(3, 3);
+    grid.set_layout(rows, cols);
 
     // for col in 0..2 {
     //     for row in 0..2 {
@@ -97,9 +104,9 @@ fn main() {
     let mut master = PngImage::load("res/swords/master_sword_dark.png").unwrap();
     let mut biggor = PngImage::load("res/swords/biggorons_sword_dark.png").unwrap();
 
-    kokiri.scale(70, 70, true, true);
-    master.scale(70, 70, true, true);
-    biggor.scale(70, 70, true, true);
+    kokiri.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
+    master.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
+    biggor.scale((w_height / rows) as i32, (w_width / cols) as i32, true, true);
     // maste
     sw1_frame.set_image(Some(kokiri));
     sw2_frame.set_image(Some(master));
